@@ -77,9 +77,9 @@ class RegistrationFOSUser1Controller extends Controller
             return $response;
         }
 
-        $this->get('session')->set('sonata_user_redirect_url', $this->get('request')->headers->get('referer'));
+        $this->get('session')->set('sonata_user_redirect_url', $this->get('request_stack')->getCurrentRequest()->headers->get('referer'));
 
-        return $this->render('FOSUserBundle:Registration:register.html.'.$this->getEngine(), array(
+        return $this->render('FOSUserBundle:Registration:register.html.twig', array(
             'form' => $form->createView(),
         ));
     }
@@ -101,7 +101,7 @@ class RegistrationFOSUser1Controller extends Controller
             throw new NotFoundHttpException(sprintf('The user with email "%s" does not exist', $email));
         }
 
-        return $this->render('FOSUserBundle:Registration:checkEmail.html.'.$this->getEngine(), array(
+        return $this->render('FOSUserBundle:Registration:checkEmail.html.twig', array(
             'user' => $user,
         ));
     }
@@ -153,7 +153,7 @@ class RegistrationFOSUser1Controller extends Controller
             throw $this->createAccessDeniedException('This user does not have access to this section.');
         }
 
-        return $this->render('FOSUserBundle:Registration:confirmed.html.'.$this->getEngine(), array(
+        return $this->render('FOSUserBundle:Registration:confirmed.html.twig', array(
             'user' => $user,
         ));
     }
@@ -184,13 +184,5 @@ class RegistrationFOSUser1Controller extends Controller
     protected function setFlash($action, $value)
     {
         $this->get('session')->getFlashBag()->set($action, $value);
-    }
-
-    /**
-     * @return string
-     */
-    protected function getEngine()
-    {
-        return $this->container->getParameter('fos_user.template.engine');
     }
 }
