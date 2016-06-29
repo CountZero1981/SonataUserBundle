@@ -17,9 +17,9 @@
             <tag name="form.type" alias="sonata_user_profile"/>
         </service>
 
-        <service id="sonata.user.profile.form.handler.default" class="Sonata\UserBundle\Form\Handler\ProfileFormHandler" scope="request" public="false">
+        <service id="sonata.user.profile.form.handler.default" class="Sonata\UserBundle\Form\Handler\ProfileFormHandler" public="false">
             <argument type="service" id="sonata.user.profile.form" />
-            <argument type="service" id="request" />
+            <argument type="service" id="request_stack" />
             <argument type="service" id="fos_user.user_manager" />
         </service>
         <service id="sonata.user.form.gender_list" class="Sonata\UserBundle\Form\Type\UserGenderListType">
@@ -28,7 +28,8 @@
             <argument>sonata_user_gender</argument>
             <tag name="form.type" alias="sonata_user_gender"/>
         </service>
-        <service id="sonata.user.registration.form" factory-method="createNamed" factory-service="form.factory" class="Symfony\Component\Form\Form">
+        <service id="sonata.user.registration.form" class="Symfony\Component\Form\Form">
+            <factory service="form.factory" method="createNamed" />
             <argument>%sonata.user.registration.form.name%</argument>
             <argument>%sonata.user.registration.form.type%</argument>
             <argument>null</argument>
@@ -42,9 +43,9 @@
             <argument>%sonata.user.registration.form.options%</argument>
         </service>
 
-        <service id="sonata.user.registration.form.handler.default" class="Sonata\UserBundle\Form\Handler\RegistrationFormHandler" scope="request" public="false">
+        <service id="sonata.user.registration.form.handler.default" class="Sonata\UserBundle\Form\Handler\RegistrationFormHandler" public="false">
             <argument type="service" id="sonata.user.registration.form" />
-            <argument type="service" id="request" />
+            <argument type="service" id="request_stack" />
             <argument type="service" id="fos_user.user_manager" />
             <argument type="service" id="fos_user.mailer" />
             <argument type="service" id="fos_user.util.token_generator" />
