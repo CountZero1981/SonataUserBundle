@@ -47,7 +47,7 @@ class RegistrationFormHandler
         $user = $this->createUser();
         $this->form->setData($user);
         if ('POST' === $this->request->getMethod()) {
-            $this->form->bind($this->request);
+            $this->form->handleRequest($this->request);
             if ($this->form->isValid()) {
                 $this->onSuccess($user, $confirmation);
                 return true;
