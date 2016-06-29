@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
-use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
 class RequestListener
 {
@@ -25,9 +25,9 @@ class RequestListener
     protected $helper;
 
     /**
-     * @var SecurityContextInterface
+     * @var TokenInterface
      */
-    protected $securityContext;
+    protected $token;
 
     /**
      * @var EngineInterface
@@ -36,13 +36,13 @@ class RequestListener
 
     /**
      * @param Helper                   $helper
-     * @param SecurityContextInterface $securityContext
+     * @param TokenInterface $token
      * @param EngineInterface          $templating
      */
-    public function __construct(Helper $helper, SecurityContextInterface $securityContext, EngineInterface $templating)
+    public function __construct(Helper $helper, TokenInterface $token, EngineInterface $templating)
     {
         $this->helper = $helper;
-        $this->securityContext = $securityContext;
+        $this->token = $token;
         $this->templating = $templating;
     }
 
@@ -55,7 +55,7 @@ class RequestListener
             return;
         }
 
-        $token = $this->securityContext->getToken();
+        $token = $this->token->getToken();
 
         if (!$token) {
             return;
@@ -65,10 +65,10 @@ class RequestListener
             return;
         }
 
-        $key = $this->helper->getSessionKey($this->securityContext->getToken());
+        $key = $this->helper->getSessionKey($this->token->getToken());
         $request = $event->getRequest();
         $session = $event->getRequest()->getSession();
-        $user = $this->securityContext->getToken()->getUser();
+        $user = $this->token->getToken()->getUser();
 
         if (!$session->has($key)) {
             return;
