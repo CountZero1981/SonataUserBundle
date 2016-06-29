@@ -38,6 +38,6 @@ class SecurityFOSUser1Controller extends SecurityController
             return new RedirectResponse($url);
         }
 
-        return parent::loginAction();
+        return parent::loginAction($request);
     }
 }
